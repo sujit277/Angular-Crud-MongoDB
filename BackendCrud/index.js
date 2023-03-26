@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { employeeRoute } from "./Routes/route.js";
+
 const app = express();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());

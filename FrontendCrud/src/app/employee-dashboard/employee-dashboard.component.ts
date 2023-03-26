@@ -9,13 +9,8 @@ import { ApiService } from '../Service/api.service';
   styleUrls: ['./employee-dashboard.component.css'],
 })
 export class EmployeeDashboardComponent implements OnInit {
-  EmployeeModelobj!: EmployeeModel;
+  EmployeeModelobj = new EmployeeModel('', '', '', '', '');
   Employeedata: any;
-  firstName = '';
-  lastName = '';
-  emailID = '';
-  designation = '';
-  mobileNo = '';
   EmployeeId!: any;
 
   constructor(private api: ApiService) {}
@@ -33,19 +28,14 @@ export class EmployeeDashboardComponent implements OnInit {
 
   /* Method for Making Post Request */
   postEmployeeDetails() {
-    this.firstName = this.Addform.value.firstName;
-    this.lastName = this.Addform.value.lastName;
-    this.emailID = this.Addform.value.emailId;
-    this.designation = this.Addform.value.designation;
-    this.mobileNo = this.Addform.value.mobileNo;
     this.EmployeeModelobj = new EmployeeModel(
-      this.firstName,
-      this.lastName,
-      this.emailID,
-      this.designation,
-      this.mobileNo
+      this.Addform.value.firstName,
+      this.Addform.value.lastName,
+      this.Addform.value.emailId,
+      this.Addform.value.designation,
+      this.Addform.value.mobileNo
     );
-    this.api.createEmployee(this.EmployeeModelobj).subscribe((res) => {
+    this.api.createEmployee(this.EmployeeModelobj).subscribe(() => {
       alert('Data Added Successfully');
       this.Addform.reset();
       this.getAllEmployee();
@@ -54,28 +44,27 @@ export class EmployeeDashboardComponent implements OnInit {
 
   /* Method for Making Get Request */
   getAllEmployee() {
-    this.api.getEmployee().subscribe((res: any) => {
-      this.Employeedata = res;
-      console.log(this.Employeedata);
+    this.api.getEmployee().subscribe((data: any) => {
+      this.Employeedata = data;
     });
   }
 
   /* Method for Making Delete Request */
-  delEmployee(row: any) {
-    this.api.deleteEmployee(row._id).subscribe((res) => {
+  delEmployee(data: any) {
+    this.api.deleteEmployee(data._id).subscribe(() => {
       alert('Data Deleted Successfully');
       this.getAllEmployee();
     });
   }
 
   /* Method for filling Modal form for Update Request*/
-  onEdit(row: any) {
-    this.EmployeeId = row._id;
-    this.Addform.controls['firstName'].setValue(row.firstName);
-    this.Addform.controls['lastName'].setValue(row.lastName);
-    this.Addform.controls['emailId'].setValue(row.emailId);
-    this.Addform.controls['designation'].setValue(row.designation);
-    this.Addform.controls['mobileNo'].setValue(row.mobileNo);
+  onEdit(data: any) {
+    this.EmployeeId = data._id;
+    this.Addform.controls['firstName'].setValue(data.firstName);
+    this.Addform.controls['lastName'].setValue(data.lastName);
+    this.Addform.controls['emailId'].setValue(data.emailId);
+    this.Addform.controls['designation'].setValue(data.designation);
+    this.Addform.controls['mobileNo'].setValue(data.mobileNo);
   }
 
   /* Method for Making Put Request */
@@ -87,7 +76,7 @@ export class EmployeeDashboardComponent implements OnInit {
     this.EmployeeModelobj.mobileNo = this.Addform.value.mobileNo;
     this.api
       .updateEmployee(this.EmployeeModelobj, this.EmployeeId)
-      .subscribe((res) => {
+      .subscribe(() => {
         alert('Data Updated Successfully');
         this.Addform.reset();
         this.getAllEmployee();

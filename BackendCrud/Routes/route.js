@@ -1,5 +1,6 @@
 import express from "express";
 const employeeRoute = express.Router();
+
 /* Employee model */
 import { Employee } from "../Model/employee.js";
 
